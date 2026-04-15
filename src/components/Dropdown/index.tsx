@@ -77,6 +77,7 @@ const DropdownComponent = React.forwardRef<IDropdownRef, DropdownProps<any>>(
       renderLeftIcon,
       renderRightIcon,
       renderItem,
+      renderSelectedItem,
       renderInputSearch,
       onFocus,
       onBlur,
@@ -442,6 +443,7 @@ const DropdownComponent = React.forwardRef<IDropdownRef, DropdownProps<any>>(
 
     const _renderDropdown = () => {
       const isSelected = currentValue && _get(currentValue, valueField);
+
       return (
         <TouchableWithoutFeedback
           testID={testID}
@@ -451,18 +453,22 @@ const DropdownComponent = React.forwardRef<IDropdownRef, DropdownProps<any>>(
         >
           <View style={styles.dropdown}>
             {renderLeftIcon?.(visible)}
-            <Text
-              style={[
-                styles.textItem,
-                isSelected !== null ? selectedTextStyle : placeholderStyle,
-                font(),
-              ]}
-              {...selectedTextProps}
-            >
-              {isSelected !== null
-                ? _get(currentValue, labelField)
-                : placeholder}
-            </Text>
+            {renderSelectedItem && isSelected ? (
+              renderSelectedItem(currentValue)
+            ) : (
+              <Text
+                style={[
+                  styles.textItem,
+                  isSelected !== null ? selectedTextStyle : placeholderStyle,
+                  font(),
+                ]}
+                {...selectedTextProps}
+              >
+                {isSelected !== null
+                  ? _get(currentValue, labelField)
+                  : placeholder}
+              </Text>
+            )}
             {renderRightIcon ? (
               renderRightIcon(visible)
             ) : (
